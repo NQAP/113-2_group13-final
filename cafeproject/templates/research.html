@@ -76,7 +76,20 @@
 			</main>
 		</div>
 	</div>
-
+	<script>
+		const cafes = [
+		  {% for cafe in cafes %}
+		  {
+			name: "{{ cafe.name|escapejs }}",
+			location: { lat: {{ cafe.latitude }}, lng: {{ cafe.longitude }} },
+			address: "{{ cafe.address|escapejs }}",
+			image_url: "{{ cafe.image_url|escapejs }}",
+			detail_url: "{{ cafe.detail_url|escapejs }}",
+			tags: {{ cafe.tags|safe }}
+		  }{% if not forloop.last %},{% endif %}
+		  {% endfor %}
+		];
+	</script>
 	<script src="https://maps.googleapis.com/maps/api/js?key=&libraries=places&callback=initMap" async defer></script>
 	<script src="{% static 'scripts/research.js' %}"></script>
 </body>

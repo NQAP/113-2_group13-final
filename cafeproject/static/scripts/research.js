@@ -9,31 +9,30 @@ window.initMap = function () {
 	  zoom: 15,
 	});
   
-	// 初始載入假資料
 	loadCafes();
 }
 
-// 假資料（後續可改成從後端抓資料）
-const cafes = [
-  	{
-		name: "DDD Cafe",
-		location: { lat: 25.0176, lng: 121.5378 },
-		address: "台北市大安區某路1號",
-		image_url:
-		"https://hips.hearstapps.com/hmg-prod/images/vergerg-1676879198.jpg",
-		detail_url: "/cafe/ddd-cafe", // → 導向 Django 內容頁
-		tags: ["unlimited_time", "has_socket", "has_meal"],
-	},
-	{
-		name: "ABC Coffee",
-		location: { lat: 25.019, lng: 121.5405 },
-		address: "台北市大安區某路2號",
-		image_url:
-		"https://doqvf81n9htmm.cloudfront.net/data/Luke1226_165/2020-02/%E5%92%96%E5%95%A1%E5%BB%B3/%E5%8F%B0%E5%8C%97%E7%99%AE%E5%92%96%E5%95%A1_40a.jpg",
-		detail_url: "/cafe/abc-coffee",
-		tags: ["quiet", "pet_friendly"],
-  	},
-];
+// // 假資料（後續可改成從後端抓資料）
+// const cafes = [
+//   	{
+// 		name: "DDD Cafe",
+// 		location: { lat: 25.0176, lng: 121.5378 },
+// 		address: "台北市大安區某路1號",
+// 		image_url:
+// 		"https://hips.hearstapps.com/hmg-prod/images/vergerg-1676879198.jpg",
+// 		detail_url: "/cafe/ddd-cafe", // → 導向 Django 內容頁
+// 		tags: ["unlimited_time", "has_socket", "has_meal"],
+// 	},
+// 	{
+// 		name: "ABC Coffee",
+// 		location: { lat: 25.019, lng: 121.5405 },
+// 		address: "台北市大安區某路2號",
+// 		image_url:
+// 		"https://doqvf81n9htmm.cloudfront.net/data/Luke1226_165/2020-02/%E5%92%96%E5%95%A1%E5%BB%B3/%E5%8F%B0%E5%8C%97%E7%99%AE%E5%92%96%E5%95%A1_40a.jpg",
+// 		detail_url: "/cafe/abc-coffee",
+// 		tags: ["quiet", "pet_friendly"],
+//   	},
+// ];
 
 function loadCafes(filters = []) {
 	clearMarkers();

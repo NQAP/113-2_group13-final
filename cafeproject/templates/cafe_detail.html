@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ cafe.name }}</title>
+</head>
+<body>
+    <h1>{{ cafe.name }}</h1>
+    <p><strong>地址：</strong>{{ cafe.address }}</p>
+    <p><strong>標籤：</strong>{{ cafe.tags }}</p>
+    <img src="{{ cafe.image_url }}" alt="{{ cafe.name }}" style="max-width: 400px;">
+    <p><a href="{% url 'cafe-map' %}">← 回地圖</a></p>
+</body>
+</html>
