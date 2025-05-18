@@ -45,27 +45,21 @@
 						<label class="form-check-label" for="pet_friendly">寵物友善</label>
 					</div>
 
-					<label for="min-price" class="form-label mt-3">低消</label>
-					<select id="min-price" class="form-select mb-2">
-						<option>不限</option>
-						<option>100元以下</option>
-						<option>100-200元</option>
-						<option>200元以上</option>
+					<label for="min_spending" class="form-label mt-3">低消</label>
+					<select id="min_spending" class="form-select mb-2">
+						<option value="不限">不限</option>
+						<option value="100">100 元以下</option>
+						<option value="100-200">100-200 元</option>
+						<option value="200">200 元以上</option>
 					</select>
 
 					<label for="rating" class="form-label">評分</label>
 					<select id="rating" class="form-select mb-2">
-						<option>不限</option>
-						<option>4分以上</option>
-						<option>4.5分以上</option>
-					</select>
-
-					<label for="peak" class="form-label">熱門時段</label>
-					<select id="peak" class="form-select mb-3">
-						<option>不限</option>
-						<option>平日下午</option>
-						<option>週末上午</option>
-					</select>
+						<option value="不限">不限</option>
+						<option value="3.5">3.5 分以上</option>
+						<option value="4">4 分以上</option>
+						<option value="4.5">4.5 分以上</option>
+					</select>					
 
 					<button type="submit" class="btn btn-dark w-100">Search</button>
 				</form>
@@ -78,18 +72,20 @@
 	</div>
 	<script>
 		const cafes = [
-		  {% for cafe in cafes %}
-		  {
-			name: "{{ cafe.name|escapejs }}",
-			location: { lat: {{ cafe.latitude }}, lng: {{ cafe.longitude }} },
-			address: "{{ cafe.address|escapejs }}",
-			image_url: "{{ cafe.image_url|escapejs }}",
-			detail_url: "{{ cafe.detail_url|escapejs }}",
-			tags: {{ cafe.tags|safe }}
-		  }{% if not forloop.last %},{% endif %}
-		  {% endfor %}
+			{% for cafe in cafes %}
+			{
+				name: "{{ cafe.name|escapejs }}",
+				location: { lat: {{ cafe.latitude }}, lng: {{ cafe.longitude }} },
+				address: "{{ cafe.address|escapejs }}",
+				image_url: "{{ cafe.image_url|escapejs }}",
+				detail_url: "{{ cafe.detail_url|escapejs }}",
+				tags: {{ cafe.tags|safe }},
+				rating: {{ cafe.rating|default:"null" }},
+				min_spending: {{ cafe.min_spending|default:"null" }}				
+			}{% if not forloop.last %},{% endif %}
+			{% endfor %}
 		];
-	</script>
+	</script>	  
 	<script src="https://maps.googleapis.com/maps/api/js?key=&libraries=places&callback=initMap" async defer></script>
 	<script src="{% static 'scripts/research.js' %}"></script>
 </body>

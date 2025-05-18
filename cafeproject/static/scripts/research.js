@@ -2,50 +2,20 @@ let map;
 let markers = [];
 
 window.initMap = function () {
-	const center = { lat: 25.0173, lng: 121.5398 }; // 台大位置
-  
-	map = new google.maps.Map(document.getElementById("map"), {
-	  center: center,
-	  zoom: 15,
-	});
-  
-	loadCafes();
+  const center = { lat: 25.0173, lng: 121.5398 }; // 台大位置
+
+  map = new google.maps.Map(document.getElementById("map"), {
+    center: center,
+    zoom: 15,
+  });
+
+  loadFilteredCafes(cafes); // 初始載入全部資料
 }
 
-// // 假資料（後續可改成從後端抓資料）
-// const cafes = [
-//   	{
-// 		name: "DDD Cafe",
-// 		location: { lat: 25.0176, lng: 121.5378 },
-// 		address: "台北市大安區某路1號",
-// 		image_url:
-// 		"https://hips.hearstapps.com/hmg-prod/images/vergerg-1676879198.jpg",
-// 		detail_url: "/cafe/ddd-cafe", // → 導向 Django 內容頁
-// 		tags: ["unlimited_time", "has_socket", "has_meal"],
-// 	},
-// 	{
-// 		name: "ABC Coffee",
-// 		location: { lat: 25.019, lng: 121.5405 },
-// 		address: "台北市大安區某路2號",
-// 		image_url:
-// 		"https://doqvf81n9htmm.cloudfront.net/data/Luke1226_165/2020-02/%E5%92%96%E5%95%A1%E5%BB%B3/%E5%8F%B0%E5%8C%97%E7%99%AE%E5%92%96%E5%95%A1_40a.jpg",
-// 		detail_url: "/cafe/abc-coffee",
-// 		tags: ["quiet", "pet_friendly"],
-//   	},
-// ];
-
-function loadCafes(filters = []) {
+function loadFilteredCafes(cafeList) {
 	clearMarkers();
 
-	cafes.forEach((cafe) => {
-		// 若有篩選條件，且 cafe 不符合，則略過
-		if (
-			filters.length > 0 &&
-			!filters.every((tag) => cafe.tags.includes(tag))
-		) {
-			return;
-		}
-
+	cafeList.forEach((cafe) => {
 		const marker = new google.maps.Marker({
 			position: cafe.location,
 			map,
@@ -64,28 +34,20 @@ function loadCafes(filters = []) {
 			`,
 		});
 
-		marker.addListener("mouseover", () => {
-			infowindow.open(map, marker);
-		});
-
-		marker.addListener("mouseout", () => {
-			infowindow.close();
-		});
-
-		marker.addListener("click", () => {
-			window.open(cafe.detail_url, "_blank");
-		});
+		marker.addListener("mouseover", () => infowindow.open(map, marker));
+		marker.addListener("mouseout", () => infowindow.close());
+		marker.addListener("click", () => window.open(cafe.detail_url, "_blank"));
 
 		markers.push(marker);
 	});
 }
+
 
 function clearMarkers() {
 	markers.forEach((marker) => marker.setMap(null));
 	markers = [];
 }
 
-// 當頁面載入完成後加上監聽器
 document.addEventListener("DOMContentLoaded", () => {
 	const form = document.getElementById("filter-form");
 
@@ -94,19 +56,59 @@ document.addEventListener("DOMContentLoaded", () => {
 
 		const filters = [];
 
-		if (document.getElementById("unlimited_time").checked)
-			filters.push("unlimited_time");
-		if (document.getElementById("has_socket").checked)
-			filters.push("has_socket");
-		if (document.getElementById("has_meal").checked)
-			filters.push("has_meal");
-		if (document.getElementById("quiet").checked)
-			filters.push("quiet");
-		if (document.getElementById("pet_friendly").checked)
-			filters.push("pet_friendly");
+		if (document.getElementById("unlimited_time").checked) filters.push("unlimited_time");
+		if (document.getElementById("has_socket").checked) filters.push("has_socket");
+		if (document.getElementById("has_meal").checked) filters.push("has_meal");
+		if (document.getElementById("quiet").checked) filters.push("quiet");
+		if (document.getElementById("pet_friendly").checked) filters.push("pet_friendly");
 
-		console.log("篩選條件：", filters);
+		// 低消條件
+		const minSpendingSelect = document.getElementById("min_spending").value;
+		let minSpendingCondition = null;
+		if (minSpendingSelect && minSpendingSelect !== "不限") {
+			if (minSpendingSelect === "100") {
+				minSpendingCondition = (val) => val < 100;
+			} else if (minSpendingSelect === "100-200") {
+				minSpendingCondition = (val) => val >= 100 && val <= 200;
+			} else if (minSpendingSelect === "200") {
+				minSpendingCondition = (val) => val > 200;
+			}
+			console.log("✅ 低消條件：", minSpendingSelect);
+		}
+		
 
-		loadCafes(filters); // 根據篩選重新載入
+		// 評分條件
+		const ratingSelect = document.getElementById("rating").value;
+		let minRating = null;
+		if (ratingSelect && ratingSelect !== "不限") {
+			minRating = parseFloat(ratingSelect);
+			console.log("✅ 評分條件：", minRating);
+		}
+		
+
+		const filteredCafes = cafes.filter((cafe) => {
+			// 篩選 tag
+			if (filters.length > 0 && !filters.every(tag => cafe.tags.includes(tag))) {
+				return false;
+			}
+		
+			// 篩選低消
+			if (minSpendingCondition) {
+				const spending = Number(cafe.min_spending);
+				if (isNaN(spending) || !minSpendingCondition(spending)) return false;
+			}
+		
+			// 篩選評分
+			if (minRating !== null) {
+				const rating = Number(cafe.rating);
+				if (isNaN(rating) || rating < minRating) return false;
+			}
+		
+			return true;
+		});
+		
+
+		console.log("結果：", filteredCafes.length, "家店符合條件");
+		loadFilteredCafes(filteredCafes);
 	});
 });

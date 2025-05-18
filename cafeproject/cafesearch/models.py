@@ -8,9 +8,10 @@ class Cafe(models.Model):
     longitude = models.FloatField()
     image_url = models.URLField()
     slug = models.SlugField(unique=True)
-    tags = models.JSONField(default=list)
-
+    tags = models.JSONField(null=True, blank=True, default=list)
+    rating = models.FloatField(null=True, blank=True)
+    min_spending = models.IntegerField(null=True, blank=True)
+    
     @property
     def detail_url(self):
         return reverse('cafe-detail', kwargs={'slug': self.slug})
-
