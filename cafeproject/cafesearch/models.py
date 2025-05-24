@@ -13,7 +13,8 @@ class Cafe(models.Model):
     slug = models.SlugField(unique=True)
     tags = models.JSONField(null=True, blank=True, default=list)
     rating = models.FloatField(null=True, blank=True)
-    min_spending = models.IntegerField(null=True, blank=True)
+    min_spending_min = models.IntegerField(null=True, blank=True)
+    min_spending_max = models.IntegerField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         # 如果還沒填緯度和經度，就從地址查詢
