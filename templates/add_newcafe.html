@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新增咖啡廳</title>
+    <link rel="stylesheet" href="{% static 'styles/add_newcafe.css' %}">
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <main class="container">
+        <h1>新增咖啡廳</h1>
+        <form id="addCafeForm" action="{% url 'cafedetail:add_newcafe' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="name" class="required">咖啡廳名稱</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address" class="required">地址</label>
+                <input type="text" id="address" name="address" required>
+            </div>
+
+            <div class="form-group">
+                <label for="booking_url">訂位網站連結</label>
+                <input type="url" id="booking_url" name="booking_url">
+            </div>
+
+            <div class="form-group">
+                <label for="image" class="required">圖片</label>
+                <input type="file" id="image" name="image" required>
+                <small>請上傳咖啡廳的照片</small>
+            </div>
+
+            <div class="form-group">
+                <label>特色</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="features" value="不限時"> 不限時</label>
+                    <label><input type="checkbox" name="features" value="有插座"> 有插座</label>
+                    <label><input type="checkbox" name="features" value="正餐"> 正餐</label>
+                    <label><input type="checkbox" name="features" value="安靜"> 安靜</label>
+                    <label><input type="checkbox" name="features" value="寵物友善"> 寵物友善</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="min_spending">低消</label>
+                <input type="number" id="min_spending" name="min_spending" min="0">
+            </div>
+
+            <div class="form-group">
+                <label for="rating">評分</label>
+                <input type="number" id="rating" name="rating" min="1" max="5">
+                <small>請輸入 1 到 5 的評分</small>
+            </div>
+
+            <button type="submit">新增咖啡廳</button>
+        </form>
+    </main>
+
+    <script src="{% static 'scripts/addnew.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}登入{% endblock %}
+{% load static %}
+{% block extrastatic %}
+	<link rel="stylesheet" href="{% static "styles/login.css" %}">
+{% endblock  %}
+
+{% block content %}
+<div class="page-title">
+    <h1>📝 使用者註冊</h1>
+</div>
+<div class="login-page-wrapper">
+    <div class="login-image">
+        <img src="{% static 'images/logo.png' %}" alt="Coffee Please Logo" class="logo-img">
+    </div>
+    <div class="login-form-wrapper">
+        <div class="login-container">
+            <form id="register-form">
+                <label for="username">帳號</label>
+                <input type="text" id="username" name="username" required>
+                <label for="password">密碼</label>
+                <input type="password" id="password" name="password" required>
+                <label for="password2">確認密碼</label>
+                <input type="password" id="password2" name="password2" required>
+                <button type="submit">註冊</button>
+            </form>
+            <div id="msg"></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="{% static "scripts/register.js" %}"></script>
+{% endblock %}
