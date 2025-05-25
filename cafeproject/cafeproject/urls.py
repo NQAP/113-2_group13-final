@@ -14,31 +14,18 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path
-from cafesearch.views import research_page, cafe_detail
+from django.urls import path, include
+from django.views.generic import RedirectView
 from django.contrib import admin
 from cafesearch import views
-from cafesearch.views import ProtectedView, LogoutView, RegisterAPI
-from django.contrib.auth.views import LoginView
-from rest_framework_simplejwt.views import (
-  TokenObtainPairView,
-  TokenRefreshView,
-)
+
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index, name='index'),
-    path('research/', research_page, name='research'),
-    path('<slug:slug>/', cafe_detail, name='cafe-detail'),
-    path('cafe/login/', LoginView.as_view(template_name='login.html'), name='login-page'),
-    path('api/protected/', ProtectedView.as_view(), name='protected'),
-    path('cafe/api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair_cafe'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/logout/', LogoutView.as_view(), name='auth_logout'),
-    path('cafe/register/', views.register_page, name='register-page'),
-    path('cafe/api/register/', RegisterAPI.as_view(), name='register-api'),
-
+    path('', RedirectView.as_view(url="cafe/index/")),
+    path('cafesearch/', include('cafesearch.urls')),
+    path('cafe/', include("cafe.urls")),
 ]
 
 

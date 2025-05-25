@@ -1,92 +1,80 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>台大不限時咖啡廳地圖</title>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-	<link rel="stylesheet" href="{% static 'styles/research.css' %}">
-</head>
-<body>
-	<header class="header d-flex justify-content-between align-items-center px-4">
-		<div class="fs-4 fw-bold">☕ Cafe Map</div>
-		<nav>
-			<a href="#" class="nav-link d-inline-block">首頁</a>
-			<a href="#" class="nav-link d-inline-block">新增</a>
-			<a href="#" class="nav-link d-inline-block">登入</a>
-			<a href="#" class="nav-link d-inline-block">註冊</a>
-		</nav>
-	</header>
+{% block title %}台大不限時咖啡廳地圖{% endblock %}
+{% block extrastatic %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'styles/research.css' %}">
+{% endblock extrastatic %}
 
-	<div class="container-fluid">
-		<div class="row">
-			<aside class="col-md-3 sidebar">
-				<form id="filter-form" class="p-3">
-					<h5 class="mb-3">重新搜尋：</h5>
-					<div class="form-check custom-radio">
-						<input class="form-check-input" type="checkbox" id="unlimited_time">
-						<label class="form-check-label" for="unlimited_time">不限時</label>
-					</div>
-					<div class="form-check custom-radio">
-						<input class="form-check-input" type="checkbox" id="has_socket">
-						<label class="form-check-label" for="has_socket">有插座</label>
-					</div>
-					<div class="form-check custom-radio">
-						<input class="form-check-input" type="checkbox" id="has_meal">
-						<label class="form-check-label" for="has_meal">正餐</label>
-					</div>
-					<div class="form-check custom-radio">
-						<input class="form-check-input" type="checkbox" id="quiet">
-						<label class="form-check-label" for="quiet">安靜</label>
-					</div>
-					<div class="form-check custom-radio">
-						<input class="form-check-input" type="checkbox" id="pet_friendly">
-						<label class="form-check-label" for="pet_friendly">寵物友善</label>
-					</div>
 
-					<label for="min_spending" class="form-label mt-3">低消</label>
-					<select id="min_spending" class="form-select mb-2">
-						<option value="不限">不限</option>
-						<option value="100">100 元以下</option>
-						<option value="100-200">100-200 元</option>
-						<option value="200">200 元以上</option>
-					</select>
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <aside class="col-md-3 sidebar">
+                <form id="filter-form" class="p-3">
+                    <h5 class="mb-3">重新搜尋：</h5>
+                    <div class="form-check custom-radio">
+                        <input class="form-check-input" type="checkbox" id="unlimited_time">
+                        <label class="form-check-label" for="unlimited_time">不限時</label>
+                    </div>
+                    <div class="form-check custom-radio">
+                        <input class="form-check-input" type="checkbox" id="has_socket">
+                        <label class="form-check-label" for="has_socket">有插座</label>
+                    </div>
+                    <div class="form-check custom-radio">
+                        <input class="form-check-input" type="checkbox" id="has_meal">
+                        <label class="form-check-label" for="has_meal">正餐</label>
+                    </div>
+                    <div class="form-check custom-radio">
+                        <input class="form-check-input" type="checkbox" id="quiet">
+                        <label class="form-check-label" for="quiet">安靜</label>
+                    </div>
+                    <div class="form-check custom-radio">
+                        <input class="form-check-input" type="checkbox" id="pet_friendly">
+                        <label class="form-check-label" for="pet_friendly">寵物友善</label>
+                    </div>
 
-					<label for="rating" class="form-label">評分</label>
-					<select id="rating" class="form-select mb-2">
-						<option value="不限">不限</option>
-						<option value="3.5">3.5 分以上</option>
-						<option value="4">4 分以上</option>
-						<option value="4.5">4.5 分以上</option>
-					</select>					
+                    <label for="min_spending" class="form-label mt-3">低消</label>
+                    <select id="min_spending" class="form-select mb-2">
+                        <option value="不限">不限</option>
+                        <option value="100">100 元以下</option>
+                        <option value="100-200">100-200 元</option>
+                        <option value="200">200 元以上</option>
+                    </select>
 
-					<button type="submit" class="btn btn-dark w-100">Search</button>
-				</form>
-			</aside>
+                    <label for="rating" class="form-label">評分</label>
+                    <select id="rating" class="form-select mb-2">
+                        <option value="不限">不限</option>
+                        <option value="3.5">3.5 分以上</option>
+                        <option value="4">4 分以上</option>
+                        <option value="4.5">4.5 分以上</option>
+                    </select>					
 
-			<main class="col-md-9 p-0">
-				<div id="map"></div>
-			</main>
-		</div>
-	</div>
-	<script>
-		const cafes = [
-			{% for cafe in cafes %}
-			{
-				name: "{{ cafe.name|escapejs }}",
-				location: { lat: {{ cafe.latitude }}, lng: {{ cafe.longitude }} },
-				address: "{{ cafe.address|escapejs }}",
-				image_url: "{{ cafe.image_url|escapejs }}",
-				detail_url: "{{ cafe.detail_url|escapejs }}",
-				tags: {{ cafe.tags|safe }},
-				rating: {{ cafe.rating|default:"null" }},
-				min_spending: {{ cafe.min_spending|default:"null" }}				
-			}{% if not forloop.last %},{% endif %}
-			{% endfor %}
-		];
-	</script>	  
-	<script src="https://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&libraries=places&callback=initMap" async defer></script>
-	<script src="{% static 'scripts/research.js' %}"></script>
-</body>
-</html>
+                    <button type="submit" class="btn btn-dark w-100">Search</button>
+                </form>
+            </aside>
+
+            <main class="col-md-9 p-0">
+                <div id="map"></div>
+            </main>
+        </div>
+    </div>
+    <script>
+        const cafes = [
+            {% for cafe in cafes %}
+            {
+                name: "{{ cafe.name|escapejs }}",
+                location: { lat: {{ cafe.latitude }}, lng: {{ cafe.longitude }} },
+                address: "{{ cafe.address|escapejs }}",
+                image_url: "{{ cafe.image_url|escapejs }}",
+                detail_url: "{{ cafe.detail_url|escapejs }}",
+                tags: {{ cafe.tags|safe }},
+                rating: {{ cafe.rating|default:"null" }},
+                min_spending: {{ cafe.min_spending|default:"null" }}				
+            }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+    </script>	  
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&libraries=places&callback=initMap" async defer></script>
+    <script src="{% static 'scripts/research.js' %}"></script>
+{% endblock content %}

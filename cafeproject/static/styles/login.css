@@ -2,6 +2,7 @@ body {
   font-family: 'Segoe UI', sans-serif;
   background: #f2f0ef;
   margin: 0;
+  padding-top: 40px;
 }
 
 .page-title {
@@ -29,6 +30,7 @@ body {
   align-items: center;
   padding-right: 2rem;
 }
+
 .login-image img {
   max-width: 260px;
   height: auto;
