@@ -7,6 +7,7 @@ from django.urls import reverse
 class Cafe(models.Model):
     name = models.CharField(max_length=100)
     address = models.CharField(max_length=200)
+    district = models.CharField(max_length=20, null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
     image_url = models.URLField()

@@ -13,8 +13,10 @@ from django.contrib.auth.models import User
 
 def research_page(request):
     cafes = Cafe.objects.all()
+    districts = Cafe.objects.values_list('district', flat=True).distinct()
     return render(request, 'research.html', {
         'cafes': cafes,
+        'districts': sorted(set(districts)),
         'google_api_key': settings.GOOGLE_MAPS_API_KEY
     })
 

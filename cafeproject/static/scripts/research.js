@@ -73,14 +73,16 @@ document.addEventListener("DOMContentLoaded", () => {
 			if (maxLimit !== null && (max === null || max > maxLimit)) return false;
 			return true;
 		};
-		
+
 		// 評分條件
 		const ratingSelect = document.getElementById("rating").value;
 		let minRating = null;
 		if (ratingSelect && ratingSelect !== "不限") {
 			minRating = parseFloat(ratingSelect);
-			console.log("✅ 評分條件：", minRating);
 		}
+
+		// 行政區條件
+		const selectedDistrict = document.getElementById("district").value;
 
 		const filteredCafes = cafes.filter((cafe) => {
 			// 篩選 tag
@@ -88,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				return false;
 			}
 
-			// ✅ 篩選低消（範圍交集邏輯）
+			// 篩選低消（範圍交集邏輯）
 			if (minSpendingFilterFn) {
 				const min = cafe.min_spending_min;
 				const max = cafe.min_spending_max;
@@ -101,10 +103,13 @@ document.addEventListener("DOMContentLoaded", () => {
 				if (isNaN(rating) || rating < minRating) return false;
 			}
 
+			// 篩選行政區
+			if (selectedDistrict && cafe.district !== selectedDistrict) {
+				return false;
+			}
+
 			return true;
 		});
-
-		console.log("結果：", filteredCafes.length, "家店符合條件");
 		loadFilteredCafes(filteredCafes);
 	});
 });

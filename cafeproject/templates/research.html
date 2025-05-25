@@ -61,7 +61,15 @@
 							<option value="600">600 元</option>
 						</select>
 					</div>
-					
+
+					<label for="district" class="form-label">行政區</label>
+					<select id="district" class="form-select mb-2">
+						<option value="">不限</option>
+						{% for district in districts %}
+							<option value="{{ district }}">{{ district }}</option>
+						{% endfor %}
+					</select>					
+										
 					<label for="rating" class="form-label">評分</label>
 					<select id="rating" class="form-select mb-2">
 						<option value="不限">不限</option>
@@ -86,6 +94,7 @@
 				name: "{{ cafe.name|escapejs }}",
 				location: { lat: {{ cafe.latitude }}, lng: {{ cafe.longitude }} },
 				address: "{{ cafe.address|escapejs }}",
+				district: "{{ cafe.district|escapejs }}",
 				image_url: "{{ cafe.image_url|escapejs }}",
 				detail_url: "{{ cafe.detail_url|escapejs }}",
 				tags: {{ cafe.tags|safe }},
