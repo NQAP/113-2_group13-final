@@ -2,11 +2,11 @@ import requests
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
+from django.db.models.fields.json import JSONField
 
 
 class Cafe(models.Model):
     name = models.CharField(max_length=100)
-    address = models.CharField(max_length=200)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
     booking_url = models.URLField(null=True, blank=True) 
@@ -16,10 +16,29 @@ class Cafe(models.Model):
     rating = models.FloatField(null=True, blank=True)
     min_spending = models.IntegerField(null=True, blank=True)
 
+    # 地址欄位
+    city = models.CharField(max_length=50, default='台北市') # 可以設定預設值
+    district = models.CharField(max_length=50, blank=True, null=True)
+    street_name = models.CharField(max_length=100, blank=True, null=True)
+    lane = models.CharField(max_length=20, blank=True, null=True)
+    alley = models.CharField(max_length=20, blank=True, null=True)
+    number = models.CharField(max_length=20, blank=True, null=True)
+    floor = models.CharField(max_length=20, blank=True, null=True)
+    room = models.CharField(max_length=20, blank=True, null=True)
+    
+    def get_full_address(self):
+        parts = [self.city, self.district, self.street_name]
+        if self.lane: parts.append(f"{self.lane}巷")
+        if self.alley: parts.append(f"{self.alley}弄")
+        if self.number: parts.append(f"{self.number}號")
+        if self.floor: parts.append(f"{self.floor}樓")
+        if self.room: parts.append(f"{self.room}室")
+        return "".join(filter(None, parts)) # 過濾掉 None 值
+
     def save(self, *args, **kwargs):
         # 如果還沒填緯度和經度，就從地址查詢
-        if (not self.latitude or not self.longitude) and self.address:
-            lat, lng = self.geocode_address()
+        if (not self.latitude or not self.longitude) and self.get_full_address():
+            lat, lng = self.geocode_address() 
             if lat and lng:
                 self.latitude = lat
                 self.longitude = lng
@@ -27,9 +46,13 @@ class Cafe(models.Model):
 
     def geocode_address(self):
         api_key = settings.GOOGLE_MAPS_API_KEY
+        full_address_string = self.get_full_address()
+        
+        if not full_address_string: 
+            return None, None
         response = requests.get(
             "https://maps.googleapis.com/maps/api/geocode/json",
-            params={"address": self.address, "key": api_key}
+            params={"address": full_address_string, "key": api_key}
         )
         results = response.json().get("results")
         if results:

@@ -25,7 +25,7 @@
       <p>電話：{{ cafe.phone_number }}</p> 
       {% endif %}
 
-      <p>地址：{{ cafe.address }}</p> 
+      <p>地址：{{ cafe.get_full_address }}</p> 
       
       <div class="cafe-features"> {# 使用你的 class 和結構 #}
         <h3>特色：</h3>
