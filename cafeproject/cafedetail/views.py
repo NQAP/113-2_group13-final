@@ -35,8 +35,9 @@ def add_new_cafe_view(request):
         booking_url = request.POST.get('booking_url')
         uploaded_image_file = request.FILES.get('image')
         features = request.POST.getlist('features') 
-        min_spending_min = request.POST.get('min_spending_min')
-        min_spending_max = request.POST.get('min_spending_max')
+        min_spending_min = int(request.POST.get('min_spending_min'))
+        min_spending_max = int(request.POST.get('min_spending_max'))
+        print(type(min_spending_min))
         rating = request.POST.get('rating')
 
         full_address_for_geocode = f"{city}{district or ''}{street_name or ''}"
@@ -80,6 +81,7 @@ def add_new_cafe_view(request):
             context = {
                 'error': '新增咖啡廳失敗，最低消費不能高於最高消費'
             }
+            return render(request, 'add_newcafe.html', context)
 
         # --- 1. 獲取經緯度 ---
         latitude = None
@@ -110,7 +112,9 @@ def add_new_cafe_view(request):
         image_url_to_save = None
         if uploaded_image_file:
             file_name = default_storage.save(os.path.join('cafe_images', uploaded_image_file.name), uploaded_image_file)
-            image_url_to_save = settings.MEDIA_URL + file_name 
+            image_url_to_save = '../media/' + file_name
+            print (file_name)
+            print(image_url_to_save)
 
         # --- 3. 生成 slug ---
         cafe_slug = slugify(name)

@@ -10,7 +10,7 @@ class Cafe(models.Model):
     district = models.CharField(max_length=20, null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
-    image_url = models.URLField()
+    image_url = models.CharField(max_length=500)
     slug = models.SlugField(unique=True)
     tags = models.JSONField(null=True, blank=True, default=list)
     rating = models.FloatField(null=True, blank=True)
