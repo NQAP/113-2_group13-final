@@ -1,4 +1,0 @@
-from cafesearch.models import Cafe
-
-# 刪除全部資料
-Cafe.objects.all().delete()
