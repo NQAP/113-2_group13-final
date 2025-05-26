@@ -1,0 +1,128 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f2f0ef;
+  margin: 0;
+  padding-top: 40px;
+}
+
+.page-title {
+	text-align: center;
+	margin-bottom: 1rem;
+	color: #7e441f;
+	font-size: 1.8rem;
+	font-weight: 600;
+}
+
+.login-page-wrapper {
+  display: flex;
+  justify-content: center;      
+  align-items: center;
+  height: calc(100vh - 64px); /* 扣掉 header 高度，假設 header 約 64px */
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.login-image {
+  flex: 1 1 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 2rem;
+}
+
+.login-image img {
+  max-width: 260px;
+  height: auto;
+  border-radius: 16px;
+}
+
+.login-form-wrapper {
+  flex: 1 1 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.login-container {
+	background-color: #ffffff;
+	padding: 2rem;
+	border-radius: 16px;
+	box-shadow: 0 10px 25px #894d27; 
+	width: 360px;
+	border: 2px solid #7e441f;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.logo-img {
+    height: 48px;
+}
+
+h2 {
+	text-align: center;
+	margin-bottom: 1.5rem;
+	color: #7e441f;
+	font-weight: 600;
+}
+
+form {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+label {
+	display: block;
+	margin: 0.6rem 0 0.3rem;
+	font-weight: 500;
+	color: #9a581b;
+	width: 100%;
+	text-align: left;
+}
+
+input {
+	width: 100%;
+	padding: 0.6rem;
+	border: 1px solid #d8a893;
+	border-radius: 8px;
+	outline: none;
+	transition: border 0.2s;
+	background-color: #fff8f4;
+}
+
+input:focus {
+	border-color: #bc7447;
+	background-color: #fff3ea;
+}
+
+button {
+	width: 100%;
+	padding: 0.8rem;
+	margin-top: 1.2rem;
+	background: linear-gradient(to right, #c89a68, #cda475);
+	color: #fff;
+	border: none;
+	border-radius: 8px;
+	font-weight: bold;
+	cursor: pointer;
+	transition: background 0.3s ease;
+}
+
+button:hover {
+	background: linear-gradient(to right, #bc8347, #c28e57);
+}
+
+#msg {
+	text-align: center;
+	margin-top: 1rem;
+	font-weight: 500;
+}
+#msg.success {
+	color: #388e3c;
+}
+#msg.error {
+	color: #d32f2f;
+}

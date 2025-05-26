@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}台大不限時咖啡廳地圖{% endblock %}
+{% block extrastatic %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'styles/research.css' %}">
+{% endblock extrastatic %}
+
+
+{% block content %}
+    <div class="container-fluid">
+		<div class="row">
+			<aside class="col-md-3 sidebar">
+				<form id="filter-form" class="p-3">
+					<h5 class="mb-3">重新搜尋：</h5>
+					<div class="form-check custom-radio">
+						<input class="form-check-input" type="checkbox" id="unlimited_time">
+						<label class="form-check-label" for="unlimited_time">不限時</label>
+					</div>
+					<div class="form-check custom-radio">
+						<input class="form-check-input" type="checkbox" id="has_socket">
+						<label class="form-check-label" for="has_socket">有插座</label>
+					</div>
+					<div class="form-check custom-radio">
+						<input class="form-check-input" type="checkbox" id="has_meal">
+						<label class="form-check-label" for="has_meal">正餐</label>
+					</div>
+					<div class="form-check custom-radio">
+						<input class="form-check-input" type="checkbox" id="quiet">
+						<label class="form-check-label" for="quiet">安靜</label>
+					</div>
+					<div class="form-check custom-radio">
+						<input class="form-check-input" type="checkbox" id="pet_friendly">
+						<label class="form-check-label" for="pet_friendly">寵物友善</label>
+					</div>
+
+					<label class="form-label mt-3">消費範圍</label>
+					<div class="d-flex gap-2 mb-2">
+						<select id="min_spending_min" class="form-select">
+							<option value="-1">不限</option>
+							<option value="0">0 元</option>
+							<option value="200">200 元</option>
+							<option value="400">400 元</option>
+						</select>
+						<span class="align-self-center">至</span>
+						<select id="min_spending_max" class="form-select">
+							<option value="">不限</option>
+							<option value="200">200 元</option>
+							<option value="400">400 元</option>
+							<option value="600">600 元</option>
+						</select>
+					</div>
+
+					<label for="district" class="form-label">行政區</label>
+					<select id="district" class="form-select mb-2">
+						<option value="">不限</option>
+						{% for district in districts %}
+							<option value="{{ district }}">{{ district }}</option>
+						{% endfor %}
+					</select>					
+										
+					<label for="rating" class="form-label">評分</label>
+					<select id="rating" class="form-select mb-2">
+						<option value="不限">不限</option>
+						<option value="3.5">3.5 分以上</option>
+						<option value="4">4 分以上</option>
+						<option value="4.5">4.5 分以上</option>
+					</select>					
+
+					<button type="submit" class="btn btn-dark w-100">Search</button>
+				</form>
+			</aside>
+
+			<main class="col-md-9 p-0">
+				<div id="map"></div>
+			</main>
+		</div>
+	</div>
+	<script>
+		const cafes = [
+			{% for cafe in cafes %}
+			{
+				name: "{{ cafe.name|escapejs }}",
+				location: { lat: {{ cafe.latitude }}, lng: {{ cafe.longitude }} },
+				address: "{{ cafe.address|escapejs }}",
+				district: "{{ cafe.district|escapejs }}",
+				image_url: "{{ cafe.image_url|escapejs }}",
+				detail_url: "{{ cafe.detail_url|escapejs }}",
+				tags: {{ cafe.tags|safe }},
+				rating: {{ cafe.rating|default:"null" }},
+				min_spending_min: {{ cafe.min_spending_min|default:"null" }},
+    			min_spending_max: {{ cafe.min_spending_max|default:"null" }},				
+			}{% if not forloop.last %},{% endif %}
+			{% endfor %}
+		];
+	</script>	  
+	<!-- 先載入 JS（定義了 window.initMap） -->
+	<script src="{% static 'scripts/research.js' %}"></script>
+
+	<!-- 再載入 Google Maps 並指定 callback -->
+	<script async defer	src="https://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&libraries=places&callback=initMap"></script>
+{% endblock content %}

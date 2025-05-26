@@ -1,0 +1,140 @@
+<!-- index.html (Session_cookies) -->
+{% extends "base.html" %}
+{% load static %}
+{% block title %}尋找咖啡廳{% endblock %}
+{% block extrastatic %}
+    <link rel="stylesheet" href="{% static "styles/index.css" %}">
+{% endblock extrastatic %}
+
+{% block content %}
+<div class="page-title">
+    <h1>☕ 尋找咖啡廳系統</h1>
+</div>
+
+<div class="maincontent">
+    <form class="searchform">
+        <div class="selectpart">
+            <div class="selectregion">
+                <label for="min_spending" class="form-label">請選擇地區</label>
+                <select id="min_spending" class="form-select mb-2">
+                    <option value="不限">不限</option>
+                    <option value="100">100 元以下</option>
+                    <option value="100-200">100-200 元</option>
+                    <option value="200">200 元以上</option>
+                </select>
+            </div>
+        </div>
+        <div class="checkboxpart">
+            <div class="form-check custom-radio">
+                <input class="form-check-input" type="checkbox" id="unlimited_time">
+                <label class="form-check-label" for="unlimited_time">不限時</label>
+            </div>
+            <div class="form-check custom-radio">
+                <input class="form-check-input" type="checkbox" id="has_socket">
+                <label class="form-check-label" for="has_socket">有插座</label>
+            </div>
+            <div class="form-check custom-radio">
+                <input class="form-check-input" type="checkbox" id="has_meal">
+                <label class="form-check-label" for="has_meal">正餐</label>
+            </div>
+            <div class="form-check custom-radio">
+                <input class="form-check-input" type="checkbox" id="quiet">
+                <label class="form-check-label" for="quiet">安靜</label>
+            </div>
+            <div class="form-check custom-radio">
+                <input class="form-check-input" type="checkbox" id="pet_friendly">
+                <label class="form-check-label" for="pet_friendly">寵物友善</label>
+            </div>
+        </div>
+        <div class="selectpart">
+            <div class="selectdiv">
+                <label for="min_spending" class="form-label">低消</label>
+                <select id="min_spending" class="form-select mb-2">
+                    <option value="不限">不限</option>
+                    <option value="100">100 元以下</option>
+                    <option value="100-200">100-200 元</option>
+                    <option value="200">200 元以上</option>
+                </select>
+            </div>
+            
+            <div class="selectdiv">
+                <label for="rating" class="form-label">評分</label>
+                <select id="rating" class="form-select mb-2">
+                    <option value="不限">不限</option>
+                    <option value="3.5">3.5 分以上</option>
+                    <option value="4">4 分以上</option>
+                    <option value="4.5">4.5 分以上</option>
+                </select>	
+            </div>
+
+        </div>
+        <button class="btn" type="submit">以這些條件搜尋</button>
+    </form>
+    <div class="visitedpart">
+        <div class="visitedtext">
+            <h2>您過去曾搜尋過...</h2>
+        </div>
+        <div class="visitedcardcontainer">
+            <div class="visitedcard" data-link={% url "homepage" %}>
+                <div class="visitedimagecontainer">
+                    <img src={% static "images/index/cafeimage.jpg" %} alt="" class="visitedimage">
+                </div>
+                <div class="visitedcardtext">
+                    <h3>XXX咖啡廳</h3>
+                    <p>當前評分：</p>
+                    <p>標籤：</p>
+                </div>
+            </div>
+            <div class="visitedcard">
+                <div class="visitedimagecontainer">
+                    <img src={% static "images/index/cafeimage.jpg" %} alt="" class="visitedimage">
+                </div>
+            </div>
+            <div class="visitedcard">
+                <div class="visitedimagecontainer">
+                    <img src={% static "images/index/cafeimage.jpg" %} alt="" class="visitedimage">
+                </div>
+            </div>
+            <div class="visitedcard">
+                <div class="visitedimagecontainer">
+                    <img src={% static "images/index/cafeimage.jpg" %} alt="" class="visitedimage">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="recommendedpart">
+        <div class="recommendedtext">
+            <h2>為您推薦</h2>
+        </div>
+        <div class="recommendedcardcontainer">
+            <div class="recommendedcard" data-link={% url "homepage" %}>
+                <div class="recommendedimagecontainer">
+                    <img src={% static "images/index/cafeimage.jpg" %} alt="" class="recommendedimage">
+                </div>
+            </div>
+            <div class="recommendedcard">
+                <div class="recommendedimagecontainer">
+                    <img src={% static "images/index/cafeimage.jpg" %} alt="" class="recommendedimage">
+                </div>
+            </div>
+            <div class="recommendedcard">
+                <div class="recommendedimagecontainer">
+                    <img src={% static "images/index/cafeimage.jpg" %} alt="" class="recommendedimage">
+                </div>
+            </div>
+            <div class="recommendedcard">
+                <div class="recommendedimagecontainer">
+                    <img src={% static "images/index/cafeimage.jpg" %} alt="" class="recommendedimage">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script type="text/javascript" src="{% static "scripts/recommendedcard.js" %}"></script>
+<script type="text/javascript" src="{% static "scripts/visitedcard.js" %}"></script>
+
+{% endblock %}
