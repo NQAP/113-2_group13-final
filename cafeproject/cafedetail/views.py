@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.text import slugify
 from django.http import JsonResponse
 from cafesearch.models import Cafe
+from cafedetail.models import CafeComment
+from django.contrib.auth.models import User # 如果你想關聯到使用者
 from django.conf import settings
 import requests
 import json
@@ -95,11 +97,16 @@ def add_new_cafe_view(request):
         longitude = None
         
         full_address_for_geocode = f"{city}{district or ''}{street_name or ''}"
-        if lane: full_address_for_geocode += f"{lane}巷"
-        if alley: full_address_for_geocode += f"{alley}弄"
-        if number: full_address_for_geocode += f"{number}號"
-        if floor: full_address_for_geocode += f"{floor}樓"
-        if room: full_address_for_geocode += f"{room}室"
+        if lane: 
+            full_address_for_geocode += f"{lane}巷"
+        if alley: 
+            full_address_for_geocode += f"{alley}弄"
+        if number: 
+            full_address_for_geocode += f"{number}號"
+        if floor: 
+            full_address_for_geocode += f"{floor}樓"
+        if room: 
+            full_address_for_geocode += f"{room}室"
 
         if full_address_for_geocode and hasattr(settings, 'GOOGLE_MAPS_API_KEY') and settings.GOOGLE_MAPS_API_KEY:
             geocode_url = f"https://maps.googleapis.com/maps/api/geocode/json?address={full_address_for_geocode}&key={settings.GOOGLE_MAPS_API_KEY}"
@@ -180,3 +187,47 @@ def add_new_cafe_view(request):
             return render(request, 'add_newcafe.html', context)
 
     return render(request, 'add_newcafe.html', {})
+
+def get_cafe_comments_view(request, slug):
+    if request.method == 'POST':
+        cafe_profile = Cafe.objects.get(slug=slug)
+        comments = CafeComment.objects.filter(cafe_profile=cafe_profile).order_by('-created_at')
+        comments_data = []
+        for comment in comments:
+            comments_data.append({
+                'user': comment.user.username,
+                'rating': comment.rating,
+                'comment_text': comment.comment_text,
+                'created_at': comment.created_at,
+            })
+
+        if len(comments_data) == 0:
+            comments_data.append({
+                'user': -1,
+                'rating': -1,
+                'comment_text': "nothing here",
+                'created_at': 0,
+            })
+        return JsonResponse({'comments': comments_data})
+    else: 
+        return redirect('cafe:homepage')
+    
+def add_cafe_comment_ajax_view(request, slug):
+    cafe_profile = Cafe.objects.get(slug=slug)
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            user_id = data.get('user')
+            rating = float(data.get('rating'))
+            user = User.objects.get(id=user_id)
+            comment_text = data.get('text')
+            if comment_text:
+                comment = CafeComment(cafe_profile=cafe_profile, user=user, rating=rating, comment_text=comment_text)
+                comment.save()
+                return JsonResponse({'status': 'success', 'message': '評論已發布', 'user': user.username, 'text': comment_text, 'created_at': comment.created_at.isoformat()})
+            else:
+                return JsonResponse({'status': 'error', 'message': '評論內容不能為空'}, status=400)
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': '無效的 JSON'}, status=400)
+    else: 
+        return redirect('cafe:homepage')

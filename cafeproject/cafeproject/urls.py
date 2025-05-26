@@ -17,7 +17,6 @@ Including another URLconf
 from django.urls import path, include
 from django.views.generic import RedirectView
 from django.contrib import admin
-from cafesearch import views
 from django.conf import settings
 from django.conf.urls.static import static
 

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from rest_framework.views import APIView

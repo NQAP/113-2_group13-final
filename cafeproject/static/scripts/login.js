@@ -13,15 +13,17 @@ try {
 	if (res.ok) {
 		console.log('登入成功，令牌:', data);
 		localStorage.setItem('access', data.access);
+        const userdata = JSON.parse(atob(data.access.split('.')[1]));
+        console.log(userdata)
 		localStorage.setItem('refresh', data.refresh);
 		if (msgEl) {
 			msgEl.className = 'success';
 			msgEl.innerText = '登入成功，跳轉中...';
 		}
-		setTimeout(() => {
-			console.log('準備跳轉...');
-			window.location.href = '/';
-		}, 1000);
+		// setTimeout(() => {
+		// 	console.log('準備跳轉...');
+		// 	window.location.href = '/';
+		// }, 1000);
 	} else {
 		if (msgEl) {
 			msgEl.className = 'error';

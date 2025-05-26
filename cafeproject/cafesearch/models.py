@@ -2,7 +2,6 @@ import requests
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
-from django.db.models.fields.json import JSONField
 
 
 class Cafe(models.Model):
@@ -31,11 +30,16 @@ class Cafe(models.Model):
     
     def get_full_address(self):
         parts = [self.city, self.district, self.street_name]
-        if self.lane: parts.append(f"{self.lane}巷")
-        if self.alley: parts.append(f"{self.alley}弄")
-        if self.number: parts.append(f"{self.number}號")
-        if self.floor: parts.append(f"{self.floor}樓")
-        if self.room: parts.append(f"{self.room}室")
+        if self.lane: 
+            parts.append(f"{self.lane}巷")
+        if self.alley: 
+            parts.append(f"{self.alley}弄")
+        if self.number: 
+            parts.append(f"{self.number}號")
+        if self.floor: 
+            parts.append(f"{self.floor}樓")
+        if self.room: 
+            parts.append(f"{self.room}室")
         return "".join(filter(None, parts)) # 過濾掉 None 值
 
     def save(self, *args, **kwargs):
