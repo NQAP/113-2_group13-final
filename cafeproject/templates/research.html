@@ -93,6 +93,18 @@
 			}{% if not forloop.last %},{% endif %}
 			{% endfor %}
 		];
+        const filters = [
+            {% for condition in filters %}
+                "{{condition}}"
+                {% if not forloop.last %},{% endif %}
+                {% empty %}
+            {% endfor %}
+        ];
+        const minVal = "{{min_spending_min}}";
+        const maxVal = "{{min_spending_max}}";
+        const minRating = "{{rating}}";
+        const selectedDistrict = "{{district}}"
+        console.log(selectedDistrict)
 	</script>	  
 	<!-- 先載入 JS（定義了 window.initMap） -->
 	<script src="{% static 'scripts/research.js' %}"></script>

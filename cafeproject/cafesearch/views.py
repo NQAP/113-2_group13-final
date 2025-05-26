@@ -9,7 +9,12 @@ def search_page(request):
     return render(request, 'research.html', {
         'cafes': cafes,
         'districts': sorted(set(districts)),
-        'google_api_key': settings.GOOGLE_MAPS_API_KEY
+        'google_api_key': settings.GOOGLE_MAPS_API_KEY,
+        'filters': [],
+        'min_spending_min': '不限',
+        'min_spending_max': '不限',
+        'rating': '不限',
+        'district': '不限',
     })
 
 def cafe_detail(request, slug):

@@ -2,6 +2,8 @@ let map;
 let markers = [];
 
 window.initMap = function () {
+
+
 	const center = { lat: 25.0173, lng: 121.5398 }; // 台大位置
 
 	map = new google.maps.Map(document.getElementById("map"), {
@@ -9,11 +11,52 @@ window.initMap = function () {
 		zoom: 15,
 	});
 
-	loadFilteredCafes(cafes); // 初始載入全部資料
+    const filteredCafes = cafes.filter((cafe) => {
+        let minLimit = minVal ? parseInt(minVal) : null;
+		let maxLimit = maxVal ? parseInt(maxVal) : null;
+
+		const minSpendingFilterFn = (min, max) => {
+			if (minLimit !== null && (min === null || min < minLimit)) return false;
+			if (maxLimit !== null && (max === null || max > maxLimit)) return false;
+			return true;
+		};
+        
+        // 篩選 tag
+        if (filters.length > 0 && !filters.every(tag => cafe.tags.includes(tag))) {
+            return false;
+        }
+
+        // 篩選低消（範圍交集邏輯）
+        if (minSpendingFilterFn) {
+            const min = cafe.min_spending_min;
+            const max = cafe.min_spending_max;
+            if (!minSpendingFilterFn(min, max)) return false;
+        }
+
+        // 篩選評分
+        if (minRating !== null) {
+            const rating = Number(cafe.rating);
+            if (isNaN(rating) || rating < minRating) return false;
+        }
+
+        // 篩選行政區
+        if (selectedDistrict && cafe.district !== selectedDistrict) {
+            return false;
+        }
+
+        return true;
+    });
+    
+    loadFilteredCafes(filteredCafes);
+
+	// loadFilteredCafes(cafes); // 初始載入全部資料
 };
 
 function loadFilteredCafes(cafeList) {
 	clearMarkers();
+
+	// 建立 bounds
+	const bounds = new google.maps.LatLngBounds();
 
 	cafeList.forEach((cafe) => {
 		const marker = new google.maps.Marker({
@@ -39,7 +82,15 @@ function loadFilteredCafes(cafeList) {
 		marker.addListener("click", () => window.open(cafe.detail_url, "_blank"));
 
 		markers.push(marker);
+
+		// 每新增一個 marker，就把位置加到 bounds 中
+		bounds.extend(cafe.location);
 	});
+
+	// 若 cafeList 不為空，才套用自動視野調整
+	if (cafeList.length > 0) {
+		map.fitBounds(bounds);
+	}
 }
 
 function clearMarkers() {
@@ -49,6 +100,7 @@ function clearMarkers() {
 
 document.addEventListener("DOMContentLoaded", () => {
 	const form = document.getElementById("filter-form");
+    
 
 	form.addEventListener("submit", (e) => {
 		e.preventDefault();
@@ -83,6 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 		// 行政區條件
 		const selectedDistrict = document.getElementById("district").value;
+        console.log(selectedDistrict)
 
 		const filteredCafes = cafes.filter((cafe) => {
 			// 篩選 tag

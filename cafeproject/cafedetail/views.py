@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.text import slugify
+from django.http import JsonResponse
 from cafesearch.models import Cafe
 from django.conf import settings
 import requests
@@ -8,16 +9,26 @@ import os
 from django.core.files.storage import default_storage
 
 def cafe_detail_view(request, slug):
-    cafe = get_object_or_404(Cafe, slug=slug)
+    if request.method == 'POST':
+        cafe = get_object_or_404(Cafe, slug=slug)
+        cafe_element = {
+            'name': cafe.name,
+            'address': cafe.address,
+            'image_url': cafe.image_url,
+            'tags_list': cafe.tags,
+            'rating': cafe.rating,
+        }
+        return JsonResponse({'cafe': cafe_element})
 
-    tags_list = cafe.tags 
-
-    context = {
-        'cafe': cafe,
-        'tags_list': tags_list,
-        'GOOGLE_MAPS_API_KEY': settings.GOOGLE_MAPS_API_KEY
-    }
-    return render(request, 'cafe_detail.html', context)
+    else:
+        cafe = get_object_or_404(Cafe, slug=slug)
+        tags_list = cafe.tags 
+        context = {
+            'cafe': cafe,
+            'tags_list': tags_list,
+            'GOOGLE_MAPS_API_KEY': settings.GOOGLE_MAPS_API_KEY
+        }
+        return render(request, 'cafe_detail.html', context)
 
 def add_new_cafe_view(request):
     if request.method == 'POST':

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
@@ -7,12 +7,62 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from cafesearch.models import Cafe
+
+from django.conf import settings
+
 
 def index(request):
-    if 'username' in request.session:
-        username = request.session['username']
-        useremail = request.session['useremail']
-    return render(request, 'index.html', locals())
+    cafes = Cafe.objects.all()
+    districts = Cafe.objects.values_list('district', flat=True).distinct()
+    if request.method == 'POST':
+        cafes = Cafe.objects.all()
+        districts = Cafe.objects.values_list('district', flat=True).distinct()
+        filters = []
+        district = request.POST.get('district')
+        unlimited_time = request.POST.get('unlimited_time')
+        has_socket = request.POST.get('has_socket')
+        has_meal = request.POST.get('has_meal')
+        quiet = request.POST.get('quiet')
+        pet_friendly = request.POST.get('pet_friendly')
+        min_spending_min = request.POST.get('min_spending_min')
+        min_spending_max = request.POST.get('min_spending_max')
+        rating = request.POST.get('rating')
+        if not district:
+            district = '不限'
+        if unlimited_time:
+            filters.append('unlimited_time')
+        if has_socket:
+            filters.append('has_socket')
+        if has_meal:
+            filters.append('has_meal')
+        if quiet:
+            filters.append('quiet')
+        if pet_friendly:
+            filters.append('pet_friendly')
+        context = {
+            'filters': filters,
+            'min_spending_min': min_spending_min,
+            'min_spending_max': min_spending_max,
+            'rating': rating,
+        }
+        print(context)
+        return render(request, 'research.html', {
+            'cafes': cafes,
+            'districts': sorted(set(districts)),
+            'google_api_key': settings.GOOGLE_MAPS_API_KEY,
+            'filters': filters,
+            'min_spending_min': min_spending_min,
+            'min_spending_max': min_spending_max,
+            'rating': rating,
+            'district': district,
+        })
+
+    return render(request, 'index.html', {
+        'cafes': cafes,
+        'districts': sorted(set(districts)),
+        'google_api_key': settings.GOOGLE_MAPS_API_KEY
+    })
 
 # Create your views here.
 class ProtectedView(APIView):

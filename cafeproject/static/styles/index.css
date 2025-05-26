@@ -6,27 +6,35 @@
 
 body {
   font-family: 'Segoe UI', sans-serif;
-  background: #f2f0ef;
+  background-color: #fbeed8;
   margin: 0;
-  padding-top: 40px;
+  padding-top: 60px;
   display: flex;
   justify-content: center;
-  flex-direction: column;
+}
+
+h2 {
+    padding-bottom: 10px;
+    
 }
 
 .page-title {
     width: 80%;
-    align-self: center;
-    text-align: center;
+    /* align-self: center; */
+    /* text-align: center; */
 }
 
-
 .maincontent {
-    width: 80%;
+    width: 90%;
     align-self:center;
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
     justify-content: center;    
+}
+
+.left-part {
+    width: 25%;
+    margin-right: 20px;
 }
 
 /* 表單樣式 */
@@ -62,7 +70,6 @@ body {
 
 .checkboxpart label {
     padding-right: 5px;
-    color: #3c2f20;
 }
 
 .btn {
@@ -107,7 +114,7 @@ body {
 
 .selectdiv {
     display: flex;
-    width: 50%;
+    width: 100%;
     justify-content: center;
 }
 
@@ -118,27 +125,28 @@ body {
 
 .form-select {
     font-size: 1.1rem;
-    width: 60%;
+    width: 30%;
+    margin-right: 5px;
 }
 
 /* visited part */
 .visitedcardcontainer {
-    width: 80vw;
-    height: 33vh;
-    border: 1px solid;
+    /* width: 80vw; */
+    height: 34.5vh;
+    /* border: 1px solid; */
     padding: 5px;
     overflow: auto;
     display: flex;
     justify-content: space-around;
-    
+    flex-direction: column;
     align-items: center;
     align-self: center;
     margin-bottom: 10px;
 }
 
 .visitedcard {
-    width: 18vw;
-    height: 30vh;
+    /* width: 18vw; */
+    height: 33vh;
     display: flex;
     flex-direction: column;
     justify-content: top;
@@ -160,29 +168,36 @@ body {
 }
 
 .visitedimage {
+    width: 16.5vw;
     max-width: 16.5vw;
     max-height:100%;
 }
 
+.right-part {
+    width: 66%;
+}
 /* recommended part */
 .recommendedcardcontainer {
-    width: 80vw;
-    height: 33vh;
-    border: 1px solid;
+    /* width: 80vw; */
+    /* border: 1px solid; */
     padding: 5px;
     overflow: auto;
-    display: flex;
+    display: grid;
     justify-content: space-around;
     align-items: center;
     align-self: center;
     margin-bottom: 10px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
 }
 
 .recommendedcard {
     width: 18vw;
-    height: 30vh;
+    height: 35vh;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: top;
+    align-items: center;
     border: 5px solid #fff;
     padding: 5px;
     border-radius: 10px;
@@ -200,6 +215,7 @@ body {
 }
 
 .recommendedimage {
+    width: 16.5vw;
     max-width: 16.5vw;
     max-height:100%;
 }
