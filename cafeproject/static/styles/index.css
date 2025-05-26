@@ -132,7 +132,7 @@ h2 {
 /* visited part */
 .visitedcardcontainer {
     /* width: 80vw; */
-    height: 34.5vh;
+    height: 34.4vh;
     /* border: 1px solid; */
     padding: 5px;
     overflow: auto;
@@ -145,7 +145,7 @@ h2 {
 }
 
 .visitedcard {
-    /* width: 18vw; */
+    width: 18vw;
     height: 33vh;
     display: flex;
     flex-direction: column;

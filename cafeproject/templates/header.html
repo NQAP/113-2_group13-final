@@ -16,9 +16,7 @@
             <a href={% url "login-page" %} class="login-link">登入</a>
             <a href={% url "register-page" %} class="register-link">註冊</a>
             <span class="user-menu" style="display:none;">
-                <a href="/userinfo">個人資料</a>
                 <a href={% url 'cafedetail:add-newcafe' %}>新增咖啡廳</a>
-                <a href="/contact">連絡管理員</a>
                 <a href="#" id="logout-btn">登出</a>
             </span>
         </nav>

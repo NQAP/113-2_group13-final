@@ -25,6 +25,14 @@ def cafe_detail_view(request, slug):
     else:
         cafe = get_object_or_404(Cafe, slug=slug)
         tags_list = cafe.tags 
+        english_tags_list = ['unlimited_time', 'has_socket', 'has_meal', 'quiet', 'pet_friendly']
+        chinese_tags_list = ['不限時', '有插座', '正餐', '安靜', '寵物友善']
+        for tag in tags_list:
+            if tag in english_tags_list:
+                index = english_tags_list.index(tag)
+                tags_list[tags_list.index(tag)] = chinese_tags_list[index]
+            else:
+                continue
         context = {
             'cafe': cafe,
             'tags_list': tags_list,
@@ -142,12 +150,18 @@ def add_new_cafe_view(request):
             counter += 1
 
         # --- 4. 創建 Cafe 物件並儲存 ---
+        english_tags_list = ['unlimited_time', 'has_socket', 'has_meal', 'quiet', 'pet_friendly']
+        chinese_tags_list = ['不限時', '有插座', '正餐', '安靜', '寵物友善']
+        for feature in features:
+            index = chinese_tags_list.index(feature)
+            features[features.index(feature)] = english_tags_list[index]
         try:
             new_cafe = Cafe.objects.create(
                 name=name,
                 # --- 保存細分地址欄位 ---
                 city=city, 
                 district=district,
+                address=full_address_for_geocode,
                 street_name=street_name,
                 lane=lane,
                 alley=alley,

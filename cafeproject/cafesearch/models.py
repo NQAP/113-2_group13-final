@@ -29,6 +29,8 @@ class Cafe(models.Model):
     room = models.CharField(max_length=20, blank=True, null=True)
     
     def get_full_address(self):
+        if self.address:
+            return self.address
         parts = [self.city, self.district, self.street_name]
         if self.lane: 
             parts.append(f"{self.lane}巷")
