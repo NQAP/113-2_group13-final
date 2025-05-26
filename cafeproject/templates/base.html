@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock  %}</title>
+    <link rel="stylesheet" href="{% static "styles/header.css" %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    {% block extrastatic %}{% endblock %}
+
+</head>
+<!-- <script src="{% static 'scripts/logout.js' %}"></script> -->
+<body>
+    <!-- 固定的 Header -->
+    {% include "header.html" %}
+    {% csrf_token %}
+    {% block content %}{% endblock content %}
+
+</body>
+
+</html>

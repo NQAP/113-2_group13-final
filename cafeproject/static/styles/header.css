@@ -1,0 +1,63 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 40px;
+    background: #E0A763;  
+    display: flex;
+    align-items: center; 
+    justify-content: space-between;      
+    padding: 0 20px;  
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;  
+    /* font-weight: bold; */
+}
+
+
+/* Logo 區塊 */
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 30px;
+    margin-right: 10px;
+}
+
+.logo span {
+    font-size: 18px;
+}
+
+/* .Logo_img {
+    content: url("../images/");
+} */
+
+
+/* 選單 */
+nav a {
+    text-decoration: none;
+    --color: #1a1a1a;
+    color: var(--color);
+    margin-left: 15px;
+    font-size: 16px;
+}
+
+nav a:hover {
+    color: hsl(from var(--color) h s calc(l * 5));
+}
+
+nav a:active {
+    color: hsl(from var(--color), h s 0);
+}
+
+.Lead_line {
+    display: flex;
+}
