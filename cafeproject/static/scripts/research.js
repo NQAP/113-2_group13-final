@@ -17,6 +17,9 @@ window.initMap = function () {
 function loadFilteredCafes(cafeList) {
 	clearMarkers();
 
+	// 建立 bounds
+	const bounds = new google.maps.LatLngBounds();
+
 	cafeList.forEach((cafe) => {
 		const marker = new google.maps.Marker({
 			position: cafe.location,
@@ -41,7 +44,15 @@ function loadFilteredCafes(cafeList) {
 		marker.addListener("click", () => window.open(cafe.detail_url, "_blank"));
 
 		markers.push(marker);
+
+		// 每新增一個 marker，就把位置加到 bounds 中
+		bounds.extend(cafe.location);
 	});
+
+	// 若 cafeList 不為空，才套用自動視野調整
+	if (cafeList.length > 0) {
+		map.fitBounds(bounds);
+	}
 }
 
 function clearMarkers() {
@@ -57,19 +68,19 @@ document.addEventListener("DOMContentLoaded", () => {
 		e.preventDefault();
 		console.log("✅ 成功觸發 submit");
 
-		// 行政區對應中心座標
-		const districtCenters = {
-			"中山區": { lat: 25.0685, lng: 121.5250 },
-			"中正區": { lat: 25.0352, lng: 121.5198 },
-			"信義區": { lat: 25.0330, lng: 121.5623 },
-			"內湖區": { lat: 25.0832, lng: 121.5756 },
-			"大同區": { lat: 25.0631, lng: 121.5158 },
-			"大安區": { lat: 25.0266, lng: 121.5434 },
-			"松山區": { lat: 25.0505, lng: 121.5571 },
-			"永和區": { lat: 25.0152, lng: 121.5169 },
-			"中和區": { lat: 24.9961, lng: 121.5076 },
-			"萬華區": { lat: 25.0332, lng: 121.4972 }
-		};
+		// // 行政區對應中心座標
+		// const districtCenters = {
+		// 	"中山區": { lat: 25.0685, lng: 121.5250 },
+		// 	"中正區": { lat: 25.0352, lng: 121.5198 },
+		// 	"信義區": { lat: 25.0330, lng: 121.5623 },
+		// 	"內湖區": { lat: 25.0832, lng: 121.5756 },
+		// 	"大同區": { lat: 25.0631, lng: 121.5158 },
+		// 	"大安區": { lat: 25.0266, lng: 121.5434 },
+		// 	"松山區": { lat: 25.0505, lng: 121.5571 },
+		// 	"永和區": { lat: 25.0152, lng: 121.5169 },
+		// 	"中和區": { lat: 24.9961, lng: 121.5076 },
+		// 	"萬華區": { lat: 25.0332, lng: 121.4972 }
+		// };
 
 		const filters = [];
 
@@ -131,20 +142,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
 		loadFilteredCafes(filteredCafes);
 
-		// 根據選擇區域切換地圖中心
-		if (selectedDistrict && selectedDistrict !== "不限") {
-			const center = districtCenters[selectedDistrict];
-			if (center) {
-				map.panTo(center); // 滑動
-				setTimeout(() => {
-					map.setZoom(15);
-				}, 300);
-			}
-		} else {
-			map.panTo({ lat: 25.0173, lng: 121.5398 });
-			setTimeout(() => {
-				map.setZoom(15);
-			}, 300);
-		}		
+		// // 根據選擇區域切換地圖中心
+		// if (selectedDistrict && selectedDistrict !== "不限") {
+		// 	const center = districtCenters[selectedDistrict];
+		// 	if (center) {
+		// 		map.panTo(center); // 滑動
+		// 		setTimeout(() => {
+		// 			map.setZoom(15);
+		// 		}, 300);
+		// 	}
+		// } else {
+		// 	map.panTo({ lat: 25.0173, lng: 121.5398 });
+		// 	setTimeout(() => {
+		// 		map.setZoom(15);
+		// 	}, 300);
+		// }		
 	});
 });
