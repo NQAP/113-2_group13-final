@@ -15,5 +15,4 @@ urlpatterns = [
     path('api/logout/', LogoutView.as_view(), name='auth_logout'),
     path('register/', register_page, name='register-page'),
     path('api/register/', RegisterAPI.as_view(), name='register-api'),
-
 ]

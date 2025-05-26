@@ -1,14 +1,74 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-Hant-TW">
+{% load static %}
 <head>
-    <meta charset="UTF-8">
-    <title>{{ cafe.name }}</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ cafe.name }}</title> 
+  
+  <link rel="stylesheet" href="{% static 'styles/header.css' %}">
+  <link rel="stylesheet" href="{% static 'styles/cafe_detail.css' %}"> 
+  
 </head>
 <body>
-    <h1>{{ cafe.name }}</h1>
-    <p><strong>地址：</strong>{{ cafe.address }}</p>
-    <p><strong>標籤：</strong>{{ cafe.tags }}</p>
-    <img src="{{ cafe.image_url }}" alt="{{ cafe.name }}" style="max-width: 400px;">
-    <p><a href="{% url 'cafe-map' %}">← 回地圖</a></p>
+  {% include 'header.html' %} 
+
+  <main class="cafe-detail"> 
+    <section class="cafe-info"> 
+      <h1>{{ cafe.name }}</h1>
+      
+      {% if cafe.booking_url %}
+      <a href="{{ cafe.booking_url }}" class="button" target="_blank">訂位網站</a>
+      {% endif %}
+
+      {% if cafe.phone_number %}
+      <p>電話：{{ cafe.phone_number }}</p> 
+      {% endif %}
+
+      <p>地址：{{ cafe.get_full_address }}</p> 
+      
+      <div class="cafe-features"> {# 使用你的 class 和結構 #}
+        <h3>特色：</h3>
+        <ul>
+          {% if cafe.tags %} 
+            {% for tag in cafe.tags %}
+              <li>{{ tag }}</li>
+            {% endfor %}
+          {% else %}
+            <li>無特色標籤</li> 
+          {% endif %}
+        </ul>
+      </div>
+      
+      {% if cafe.image_url %}
+        <div class="cafe-photos">
+          <img src="{{ cafe.image_url }}" alt="{{ cafe.name }}" style="max-width: 400px;">
+        </div>
+      {% else %}
+        <p>目前沒有照片</p> 
+      {% endif %}
+
+      <p><a href="{% url 'research' %}">← 回地圖</a></p> 
+
+    </section>
+
+    <section class="comments-section">
+      <h2>顧客評論</h2>
+      <div class="comments-list">
+        {% for comment in comments %} 
+        <div class="comment">
+          <p><strong>{{ comment.author.username }}</strong> (評分：{{ comment.rating }})</p>
+          {% if comment.text %}
+          <p>{{ comment.text }}</p> 
+          {% endif %}
+        </div>
+        {% empty %}
+        <p>目前沒有評論</p>
+        {% endfor %}
+      </div>
+    </section>
+  </main>
+
+  <script src="{% static 'scripts/detail.js' %}"></script> 
 </body>
 </html>

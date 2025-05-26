@@ -1,7 +1,4 @@
 /* style.css */
-body {
-    padding-top: 40px;
-}
 
 /* 地圖區塊 */
 #map {
@@ -10,17 +7,6 @@ body {
 }
 
 /* Sidebar 樣式 */
-.sidebar {
-	background-color: #fcecd4; /* 柔和暖色 */
-	height: 100vh;
-	overflow-y: auto;
-	border-right: 1px solid #e1cdb3;
-}
-
-.sidebar h5 {
-	color: #5a3e1b;
-	font-weight: bold;
-}
 
 .sidebar label {
 	color: #3c2f20;
@@ -28,8 +14,9 @@ body {
 
 /* Sidebar 整體樣式：加大文字、增加間距 */
 .sidebar {
+    margin-top: 40px;
 	background-color: #fcecd4;
-	height: 100vh;
+	height: 96vh;
 	overflow-y: auto;
 	border-right: 1px solid #e1cdb3;
 	font-size: 1.2rem; /* 加大整體文字 */

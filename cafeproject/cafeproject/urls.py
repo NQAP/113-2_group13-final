@@ -26,6 +26,7 @@ urlpatterns = [
     path('', RedirectView.as_view(url="cafe/index/")),
     path('cafesearch/', include('cafesearch.urls')),
     path('cafe/', include("cafe.urls")),
+    path('cafedetail/', include("cafedetail.urls")),
 ]
 
 

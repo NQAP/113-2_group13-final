@@ -70,3 +70,5 @@ class RegisterAPI(APIView):
 			return JsonResponse({"message": "註冊成功"})
 		except Exception as e:
 			return JsonResponse({"error": str(e)}, status=400)
+          
+

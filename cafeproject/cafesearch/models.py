@@ -7,13 +7,15 @@ from django.urls import reverse
 class Cafe(models.Model):
     name = models.CharField(max_length=100)
     address = models.CharField(max_length=200)
+    district = models.CharField(max_length=20, null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
     image_url = models.URLField()
     slug = models.SlugField(unique=True)
     tags = models.JSONField(null=True, blank=True, default=list)
     rating = models.FloatField(null=True, blank=True)
-    min_spending = models.IntegerField(null=True, blank=True)
+    min_spending_min = models.IntegerField(null=True, blank=True)
+    min_spending_max = models.IntegerField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         # 如果還沒填緯度和經度，就從地址查詢
