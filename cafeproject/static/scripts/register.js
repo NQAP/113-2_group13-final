@@ -3,9 +3,14 @@ document.getElementById('register-form').addEventListener('submit', async functi
 	const username = document.getElementById('username').value;
 	const password = document.getElementById('password').value;
 
+	const csrftoken = $('[name="csrfmiddlewaretoken"]').val();
+
 	const res = await fetch('/cafe/api/register/', {
 		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
+		headers: {
+			'Content-Type': 'application/json',
+			'X-CSRFToken': csrftoken
+		},
 		body: JSON.stringify({ username, password })
 	});
 
