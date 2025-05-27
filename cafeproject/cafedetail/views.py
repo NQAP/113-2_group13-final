@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.utils.text import slugify
+from slugify import slugify
 from django.http import JsonResponse
 from cafesearch.models import Cafe
 from cafedetail.models import CafeComment
