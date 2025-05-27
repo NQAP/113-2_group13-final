@@ -29,7 +29,7 @@ def index(request):
         min_spending_max = request.POST.get('min_spending_max')
         rating = request.POST.get('rating')
         if not district:
-            district = '不限'
+            district = ''
         if unlimited_time:
             filters.append('unlimited_time')
         if has_socket:
