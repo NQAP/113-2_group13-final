@@ -10,7 +10,7 @@
 2. 使用 `sudo mysql` 或 `mysql -u root -p` 以root權限開啟mysql/mariadb
 3. 輸入`CREATE DATABASE cafe_db;` 新增cafe_db database
 4. 輸入`CREATE USER 'Team13'@'localhost' IDENTIFIED BY 'Team13';` 來創建一個User叫Team13 密碼是 Team13
-5. `GRANT ALL PRIVILEGES ON cafe_db.* TO 'Team13'@'localhost';` 讓Team13 可以獲得dog_db的所有權限
+5. `GRANT ALL PRIVILEGES ON cafe_db.* TO 'Team13'@'localhost';` 讓Team13 可以獲得cafe_db的所有權限
 6. 輸入 `exit` 離開資料庫，切換到當前資料夾 `cd 113-2_group13-final/cafeproject` 後執行 `python manage.py migrate` 將Table建立好
 7. 執行`python import_cafe.py` 將資料匯入資料庫 `cafe_db` 中
 8. 開啟另一個cmd，使用 `mysql -u Team13 -p` 並輸入密碼登入mysql/mariadb
