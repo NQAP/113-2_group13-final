@@ -20,10 +20,10 @@ try {
 			msgEl.className = 'success';
 			msgEl.innerText = '登入成功，跳轉中...';
 		}
-		// setTimeout(() => {
-		// 	console.log('準備跳轉...');
-		// 	window.location.href = '/';
-		// }, 1000);
+		setTimeout(() => {
+			console.log('準備跳轉...');
+			window.location.href = '/';
+		}, 1000);
 	} else {
 		if (msgEl) {
 			msgEl.className = 'error';
